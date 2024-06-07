@@ -4,8 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import { CartProvider } from './context/CartContext';
+import { ConfigProvider, ConfigContext } from './context/ConfigContext';
 import HomeScreen from './screens/HomeScreen';
 import BottomNav from './components/BottomNav';
+import ProductsScreen from './screens/ProductsScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import CartScreen from './screens/CartScreen';
 
 const Stack = createStackNavigator();
 
@@ -38,26 +43,23 @@ const App = () => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   useEffect(() => {
-    const loadTheme = async () => {
+    const loadSettings = async () => {
       const theme = await AsyncStorage.getItem('theme');
-      if (theme) {
-        setIsDarkTheme(theme === 'dark');
-      }
+      const language = await AsyncStorage.getItem('language');
+      if (theme) setIsDarkTheme(theme === 'dark');
+      if (language) setLanguage(language);
     };
-    loadTheme();
+    loadSettings();
   }, []);
 
-  const toggleTheme = async () => {
-    setIsDarkTheme(!isDarkTheme);
-    await AsyncStorage.setItem('theme', !isDarkTheme ? 'dark' : 'light');
-  };
-
   return (
-    <CartProvider>
-      <NavigationContainer>
-        <HomeStackNavigator />
-      </NavigationContainer>
-    </CartProvider>
+    <ConfigProvider>
+      <CartProvider>
+        <NavigationContainer>
+          <HomeStackNavigator />
+        </NavigationContainer>
+      </CartProvider>
+    </ConfigProvider>
   );
 };
 

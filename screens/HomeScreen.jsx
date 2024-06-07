@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, TouchableOpacity, Animated, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ConfigContext } from '../context/ConfigContext';
+import { translations } from '../translations';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const { language } = useContext(ConfigContext);
+  const t = translations[language];
   const [fadeAnim] = useState(new Animated.Value(0));
   const [slideAnim] = useState(new Animated.Value(100));
 
@@ -29,10 +33,10 @@ const HomeScreen = () => {
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>
       <Animated.View style={{ opacity: fadeAnim }}>
-        <Text style={styles.title}>Bienvenido a la Carta Digital</Text>
+        <Text style={styles.title}>{t.welcome}</Text>
       </Animated.View>
       <Animated.View style={{ transform: [{ translateY: slideAnim }] }}>
-        <Text style={styles.subtitle}>Pulsa para continuar</Text>
+        <Text style={styles.subtitle}>{t.tapToContinue}</Text>
       </Animated.View>
     </TouchableOpacity>
   );

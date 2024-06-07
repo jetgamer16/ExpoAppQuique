@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, TextInput, Text, Button, Image, StyleSheet } from 'react-native';
+import { View, TextInput, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 const ProfileScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -38,37 +38,84 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.header}>Tu Perfil</Text>
+      <TouchableOpacity onPress={pickImage}>
+        {photo ? (
+          <Image source={{ uri: photo }} style={styles.profileImage} />
+        ) : (
+          <View style={styles.placeholderImage}>
+            <Text style={styles.placeholderText}>Añadir Foto</Text>
+          </View>
+        )}
+      </TouchableOpacity>
       <TextInput
-        placeholder="Name"
+        placeholder="Nombre de usuario"
         value={name}
         onChangeText={setName}
         style={styles.input}
       />
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {photo && <Image source={{ uri: photo }} style={styles.profileImage} />}
-      <Button title="Save Profile" onPress={saveProfile} />
+      <View style={styles.buttonContainer}>
+        <Button title="Guardar Perfil" onPress={saveProfile} color="#6200ea" />
+        <Button title="Favoritos" onPress={() => {}} color="#6200ea" />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop:90,
     flex: 1,
+    backgroundColor: '#f8f9fa',
     padding: 20,
-    backgroundColor: 'white',
+    alignItems: 'center',
   },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 10,
+  header: {
+    fontSize: 32,
+    fontWeight: 'bold',
     marginBottom: 20,
-    color: 'black',
+    color: '#333333',
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginVertical: 20,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 20,
+    borderWidth: 3,
+    borderColor: '#6200ea',
+  },
+  placeholderImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: '#e0e0e0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#6200ea',
+  },
+  placeholderText: {
+    color: '#6200ea',
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '100%',
+    height: 60,
+    fontSize:30,
+    borderColor: '#dddddd',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    backgroundColor: '#ffffff',
+    textAlign: 'center',
+    color: '#333333',
+  },
+  buttonContainer: {
+    width: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
