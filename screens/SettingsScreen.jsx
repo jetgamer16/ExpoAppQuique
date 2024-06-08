@@ -1,23 +1,19 @@
 import React, { useContext } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ConfigContext } from '../context/ConfigContext';
+import { translations } from '../translations';
 
 const SettingsScreen = () => {
-  const { isDarkTheme, toggleTheme, language, changeLanguage } = useContext(ConfigContext);
+  const { language, changeLanguage } = useContext(ConfigContext);
+  const t = translations[language];
 
   const languages = ['Español', 'Inglés', 'Francés'];
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Configuración</Text>
-
-      <View style={styles.row}>
-        <Text style={styles.text}>Modo Oscuro</Text>
-        <Switch value={isDarkTheme} onValueChange={toggleTheme} />
-      </View>
-
+      <Text style={styles.header}>{t.settings}</Text>
       <View style={styles.languageContainer}>
-        <Text style={styles.text}>Idioma</Text>
+        <Text style={styles.text}>{t.language}</Text>
         {languages.map((lang) => (
           <TouchableOpacity
             key={lang}
@@ -44,41 +40,21 @@ const SettingsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop:90,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: 'rgba(139,69,19,0.5)', 
     padding: 20,
+    alignItems: 'center',
   },
   header: {
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#333333',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: '80%',
-    justifyContent: 'space-between',
+    color: 'white',
   },
   text: {
     fontSize: 18,
-    color: '#333333',
-  },
-  button: {
-    backgroundColor: '#6200ea',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
+    color: 'white',
   },
   languageContainer: {
     width: '80%',

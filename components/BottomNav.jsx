@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -6,11 +6,15 @@ import SettingsScreen from '../screens/SettingsScreen';
 import CartScreen from '../screens/CartScreen';
 import ProductsScreen from '../screens/ProductsScreen';
 import { useTheme } from '@react-navigation/native';
+import { ConfigContext } from '../context/ConfigContext';
+import { translations } from '../translations';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomNav = () => {
   const { colors } = useTheme();
+  const { language } = useContext(ConfigContext);
+  const t = translations[language];
 
   return (
     <Tab.Navigator
@@ -23,7 +27,7 @@ const BottomNav = () => {
         name="Products"
         component={ProductsScreen}
         options={{
-          tabBarLabel: 'Productos',
+          tabBarLabel: t.products,
           tabBarIcon: ({ color }) => (
             <Icon name="shopping" color={color} size={26} />
           ),
@@ -33,7 +37,7 @@ const BottomNav = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarLabel: 'Perfil',
+          tabBarLabel: t.profile,
           tabBarIcon: ({ color }) => (
             <Icon name="account" color={color} size={26} />
           ),
@@ -43,7 +47,7 @@ const BottomNav = () => {
         name="Settings"
         component={SettingsScreen}
         options={{
-          tabBarLabel: 'Configuración',
+          tabBarLabel: t.settings,
           tabBarIcon: ({ color }) => (
             <Icon name="cog" color={color} size={26} />
           ),
@@ -53,7 +57,7 @@ const BottomNav = () => {
         name="Cart"
         component={CartScreen}
         options={{
-          tabBarLabel: 'Carrito',
+          tabBarLabel: t.cart,
           tabBarIcon: ({ color }) => (
             <Icon name="cart" color={color} size={26} />
           ),

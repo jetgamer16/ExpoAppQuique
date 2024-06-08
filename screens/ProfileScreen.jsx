@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, TextInput, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ConfigContext } from '../context/ConfigContext';
+import { translations } from '../translations';
 
 const ProfileScreen = ({ navigation }) => {
+  const { language } = useContext(ConfigContext);
+  const t = translations[language];
   const [name, setName] = useState('');
   const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     const loadProfile = async () => {
-      const name = await AsyncStorage.getItem('name');
-      const photo = await AsyncStorage.getItem('photo');
-      setName(name || '');
-      setPhoto(photo || null);
+      const savedName = await AsyncStorage.getItem('name');
+      const savedPhoto = await AsyncStorage.getItem('photo');
+      setName(savedName || '');
+      setPhoto(savedPhoto || null);
     };
     loadProfile();
   }, []);
@@ -32,31 +36,30 @@ const ProfileScreen = ({ navigation }) => {
     });
 
     if (!result.canceled) {
-      setPhoto(result.uri);
+      setPhoto(result.assets[0].uri);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Tu Perfil</Text>
+      <Text style={styles.header}>{t.profile}</Text>
       <TouchableOpacity onPress={pickImage}>
         {photo ? (
           <Image source={{ uri: photo }} style={styles.profileImage} />
         ) : (
           <View style={styles.placeholderImage}>
-            <Text style={styles.placeholderText}>Añadir Foto</Text>
+            <Text style={styles.placeholderText}>{t.addPhoto}</Text>
           </View>
         )}
       </TouchableOpacity>
       <TextInput
-        placeholder="Nombre de usuario"
+        placeholder={t.username}
         value={name}
-        onChangeText={setName}
+        onChangeText={(text) => setName(text)}
         style={styles.input}
       />
       <View style={styles.buttonContainer}>
-        <Button title="Guardar Perfil" onPress={saveProfile} color="#6200ea" />
-        <Button title="Favoritos" onPress={() => {}} color="#6200ea" />
+        <Button title={String(t.saveProfile)} onPress={saveProfile} color="#6200ea" />
       </View>
     </View>
   );
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop:90,
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: 'rgba(139,69,19,0.5)', // Fondo marrón con opacidad 0.7
     padding: 20,
     alignItems: 'center',
   },
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#333333',
+    color: 'white',
   },
   profileImage: {
     width: 150,
@@ -100,9 +103,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    width: '100%',
-    height: 60,
-    fontSize:30,
+    width: '80%',
+    height: 40,
     borderColor: '#dddddd',
     borderWidth: 1,
     borderRadius: 5,
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   buttonContainer: {
-    width: '80%',
+    width: '35%',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
